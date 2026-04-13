@@ -44,4 +44,50 @@ public class Grafo {
             }
         }
     }
+
+    // Algoritmo de dijkstra
+    public ListaEnlazada<String> dijkstra(String origen, String destino) {
+        java.util.HashMap<String, Integer> distancias = new java.util.HashMap<>();
+        java.util.HashMap<String, String> anteriores = new java.util.HashMap<>();
+        java.util.PriorityQueue<String> cola = new java.util.PriorityQueue<>(
+                (a, b) -> distancias.get(a) - distancias.get(b));
+
+        // inicializar todas las distancias en infinito
+        for (int i = 0; i < nodos.getTamanio(); i++) {
+            distancias.put(nodos.obtener(i).getNombre(), Integer.MAX_VALUE);
+        }
+
+        // la distancia al origen es 0
+        distancias.put(origen, 0);
+        cola.add(origen);
+
+        while (!cola.isEmpty()) {
+            String actual = cola.poll();
+            if (actual.equals(destino))
+                break;
+
+            NodoGrafo nodoActual = buscarNodo(actual);
+            if (nodoActual == null)
+                continue;
+
+            for (int i = 0; i < nodoActual.getVecinos().getTamanio(); i++) {
+                Arista arista = nodoActual.getVecinos().obtener(i);
+                int nuevaDistancia = distancias.get(actual) + arista.getPeso();
+                if (nuevaDistancia < distancias.get(arista.getDestino())) {
+                    distancias.put(arista.getDestino(), nuevaDistancia);
+                    anteriores.put(arista.getDestino(), actual);
+                    cola.add(arista.getDestino());
+                }
+            }
+        }
+
+        // reconstruir la ruta
+        ListaEnlazada<String> ruta = new ListaEnlazada<>();
+        String paso = destino;
+        while (paso != null) {
+            ruta.agregar(paso);
+            paso = anteriores.get(paso);
+        }
+        return ruta;
+    }
 }
