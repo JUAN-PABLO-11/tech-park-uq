@@ -18,7 +18,7 @@ public class ArbolBST<T extends Comparable<T>> {
         if (dato.compareTo(nodo.dato) < 0) {
             nodo.izquierdo = insertarRec(nodo.izquierdo, dato);
         } else {
-            nodo.derecho = insertarRec(nodo, dato);
+            nodo.derecho = insertarRec(nodo.derecho, dato);
         }
         return nodo;
     }

@@ -16,5 +16,4 @@ public class Arista {
     public int getPeso() {
         return peso;
     }
-
 }
